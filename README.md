@@ -1,2 +1,1 @@
-# fmsf-api-generator
-FMSF OpenAPI generator
+# FMSF API

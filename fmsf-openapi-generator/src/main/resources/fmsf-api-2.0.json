@@ -1,0 +1,921 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FMSF API",
+    "description": "Fire Modeling Services Framework API",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:8443/api",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ],
+  "paths": {
+    "/model/{id}/cancel": {
+      "put": {
+        "tags": [
+          "model-controller"
+        ],
+        "summary": "Cancel a model run",
+        "description": "Models that produce intermediate results, e.g. RANDIG or FSPro, will not do so.",
+        "operationId": "cancelRun",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "You do not have permission to access the requested model",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Model run was already in a terminal state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Model was successfully cancelled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelMetadataDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested model does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/resource": {
+      "post": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "Upload a resource",
+        "description": "Resources are auxiliary files that fire behavior models need in order to run, e.g. geotiff landscapes or barrier shapefiles",
+        "operationId": "upload",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "GEOTIFF",
+                "SHAPE"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Uploaded resource failed initial validation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "You do not have permission to upload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Resource upload succeeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceMetadataDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/model": {
+      "post": {
+        "tags": [
+          "model-controller"
+        ],
+        "summary": "Run a model",
+        "description": "Resource IDs refer to previously-uploaded resources",
+        "operationId": "uploadModel",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Which model type to run, valid values: FLAM, MTT_, RNDG, FSPR, FARS.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "FLAM",
+                "MTT_",
+                "FARS",
+                "RNDG",
+                "FSPR"
+              ]
+            }
+          },
+          {
+            "name": "landscape",
+            "in": "query",
+            "description": "Landscape ID. Enter ID returned from /resource endpoint.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "ignition",
+            "in": "query",
+            "description": "Ignition ID. Enter ID returned from /resource endpoint.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "barrier",
+            "in": "query",
+            "description": "Barrier ID. Enter ID returned from /resource endpoint.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "griddedWindSpeed",
+            "in": "query",
+            "description": "Gridded Wind Speed ID. Enter ID returned from /resource endpoint. Only available for use with FLAM, MTT_ and RNDG.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "griddedWindDir",
+            "in": "query",
+            "description": "Gridded Wind Direction ID. Enter ID returned from /resource endpoint. Only available for use with FLAM, MTT_ and RNDG.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Model request has been successfully submitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelMetadataDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "You have exceeded your maximum concurrent runs for this model",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input file, landscape, or required resource failed validation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "You do not have permission to run this model type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/resource/{id}": {
+      "get": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "Download a resource",
+        "operationId": "download",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "You do not have permission to access the requested resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Download file",
+            "content": {
+              "application/octet-stream": {}
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/resource/{id}/metadata": {
+      "get": {
+        "tags": [
+          "resource-controller"
+        ],
+        "summary": "Fetch metadata about a specific resource",
+        "operationId": "getResourceMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "You do not have permission to access the requested resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Metadata successfully requested and returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceMetadataDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/model/{id}": {
+      "get": {
+        "tags": [
+          "model-controller"
+        ],
+        "summary": "Download model run results",
+        "operationId": "downloadModel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "You do not have permission to access the requested model",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Download file",
+            "content": {
+              "application/octet-stream": {}
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested model does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/model/{id}/metadata": {
+      "get": {
+        "tags": [
+          "model-controller"
+        ],
+        "summary": "Fetch metadata about a specific model run",
+        "operationId": "getModelMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "You do not have permission to access the requested model",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested model does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Metadata successfully requested and returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelMetadataDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/model/{id}/input": {
+      "get": {
+        "tags": [
+          "model-controller"
+        ],
+        "summary": "Download the input file for a specific model run",
+        "operationId": "getInputFile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "You do not have permission to access the requested model",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "File download",
+            "content": {
+              "text/plain": {},
+              "application/zip": {}
+            }
+          },
+          "404": {
+            "description": "Requested model does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "ModelMetadataDto": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "modelType": {
+            "type": "string",
+            "enum": [
+              "FLAM",
+              "MTT_",
+              "FARS",
+              "RNDG",
+              "FSPR"
+            ]
+          },
+          "runStatus": {
+            "type": "string",
+            "enum": [
+              "INIT",
+              "QUED",
+              "CNCL",
+              "RUN",
+              "FAIL",
+              "DONE"
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "runtime": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "expiration": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "outputFolderSize": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "landscapeId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fuelbedId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "treeMapId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "statusMsg": {
+            "type": "string"
+          },
+          "ignitionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "barrierId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "limitingShapeId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "edgeHits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "proportionComplete": {
+            "type": "number",
+            "format": "float"
+          },
+          "firesFailed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firesCompleted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "proportionBurned": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "ResourceMetadataDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "GEOTIFF",
+              "SHAPE"
+            ]
+          },
+          "folderName": {
+            "type": "string"
+          },
+          "uploaded": {
+            "type": "string",
+            "format": "date"
+          },
+          "expiration": {
+            "type": "string",
+            "format": "date"
+          },
+          "projection": {
+            "type": "string"
+          },
+          "resolution": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numRows": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numColumns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numBands": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numCells": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "geometryType": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "description": "Basic Authentication",
+        "scheme": "basic"
+      }
+    }
+  }
+}
