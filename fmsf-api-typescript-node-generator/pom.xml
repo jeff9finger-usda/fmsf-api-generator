@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.firenet.fmsf</groupId>
+        <artifactId>fmsf-api-generator</artifactId>
+        <version>2.0.0</version>
+        <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
+    </parent>
+    <packaging>pom</packaging>
+    <artifactId>fmsf-api-typescript-node-generator</artifactId>
+    <version>2.0.0</version>
+
+    <properties>
+        <openapi-generate.verbose>false</openapi-generate.verbose>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>generate-typescript-node</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <finalName>fmsf-api-typescript-node</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openapitools</groupId>
+                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>generate-typescript-node</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <output>${project.build.directory}/${project.build.finalName}</output>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
+                                    <!--<templateDirectory>${project.parent.basedir}/src/main/resources/templates/Java</templateDirectory>-->
+                                    <generatorName>typescript-node</generatorName>
+                                    <verbose>${openapi-generate.verbose}</verbose>
+                                    <configOptions>
+                                        <skipFormModel>false</skipFormModel>
+                                        <folderStrategy>paths</folderStrategy>
+                                        <pathParamsAsVariables>true</pathParamsAsVariables>
+                                        <postmanGuid>true</postmanGuid>
+                                        <postmanIsoTimestamp>true</postmanIsoTimestamp>
+                                        <postmanVariables>true</postmanVariables>
+                                        <requestParameterGeneration>true</requestParameterGeneration>
+                                    </configOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
