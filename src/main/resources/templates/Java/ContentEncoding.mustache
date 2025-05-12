@@ -1,0 +1,32 @@
+{{>licenseInfo}}
+package {{invokerPackage}};
+
+import org.apache.hc.core5.http.ContentType;
+import java.nio.charset.Charset;
+//import java.util.List;
+
+{{>generatedAnnotation}}
+public class ContentEncoding {
+  private ContentType contentType;
+  //private List<?> headers;
+
+  public ContentEncoding(ContentType contentType) {
+    this.contentType = contentType;
+  }
+
+  private ContentEncoding(String contentType) {
+    this.contentType = ContentType.parse(contentType);
+  }
+
+  private ContentEncoding(String contentType, CharSet charSet) {
+    this(ContentType.parse(contentType, charSet));
+  }
+
+  public ContentType getContentType() {
+    return this.contentType;
+  }
+
+  public boolean isContentTypeValid(String encodingContentTypeFromDoc) {
+    return true;
+  }
+}

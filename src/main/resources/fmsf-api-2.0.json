@@ -7,7 +7,11 @@
   },
   "servers": [
     {
-      "url": "https://localhost:8443/api",
+      "url": "https://fmsf2.firenet.gov/api",
+      "description": "Generated server url"
+    },
+    {
+      "url": "https://fmsf2-qa.firenet.gov/api",
       "description": "Generated server url"
     }
   ],
@@ -280,10 +284,46 @@
         "requestBody": {
           "content": {
             "multipart/form-data": {
+              "encoding": {
+                "file": {
+                  "contentType": "application/octet-stream,application/zip",
+                  "headers": {
+                    "X-Test": {
+                      "schema": {
+                        "type": "string"
+                      }
+                    },
+                    "X-Test2": {
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "anotherFile" : {
+                  "contentType": "something/different",
+                  "headers": {
+                    "Y-Test": {
+                      "schema": {
+                        "type": "string"
+                      }
+                    },
+                    "Y-Test2": {
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
               "schema": {
                 "type": "object",
                 "properties": {
                   "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "anotherFile": {
                     "type": "string",
                     "format": "binary"
                   }
