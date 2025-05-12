@@ -780,13 +780,13 @@ public class ApiClient{{#jsr310}} extends JavaTimeFormatter{{/jsr310}} {
    * Serialize the given Java object into string according the given
    * Content-Type (only JSON is supported for now).
    * @param obj Object
-   * @param formContentEncodings content-type and other headers for multi-part forms
+   * @param formContentTypes content-type for multi-part forms
    * @param contentType Content type
    * @param formParams Form parameters
    * @return Object
    * @throws ApiException API exception
    */
-  public HttpEntity serialize(Object obj, Map<String, Object> formParams, Map<String, ContentEncoding> formContentEncodings, ContentType contentType) throws ApiException {
+  public HttpEntity serialize(Object obj, Map<String, Object> formParams, Map<String, String> formContentTypes, ContentType contentType) throws ApiException {
     String mimeType = contentType.getMimeType();
     if (isJsonMime(mimeType)) {
       try {
@@ -798,22 +798,18 @@ public class ApiClient{{#jsr310}} extends JavaTimeFormatter{{/jsr310}} {
       MultipartEntityBuilder multiPartBuilder = MultipartEntityBuilder.create();
       for (Entry<String, Object> paramEntry : formParams.entrySet()) {
         Object value = paramEntry.getValue();
+        ContentType formContentType = determineContentType(formContentTypes.get(paramEntry.getKey()), ContentType.DEFAULT_BINARY);
         if (value instanceof File) {
-          ContentEncoding encoding = formContentEncodings.getOrDefault(paramEntry.getKey(), new ContentEncoding(ContentType.DEFAULT_BINARY));
-          multiPartBuilder.addBinaryBody(paramEntry.getKey(), (File) value, encoding.getContentType(), paramEntry.getKey());
+          multiPartBuilder.addBinaryBody(paramEntry.getKey(), (File) value, formContentType, paramEntry.getKey());
         } else if (value instanceof byte[]) {
-          ContentEncoding encoding = formContentEncodings.getOrDefault(paramEntry.getKey(), new ContentEncoding(ContentType.DEFAULT_BINARY));
-          multiPartBuilder.addBinaryBody(paramEntry.getKey(), (byte[]) value, encoding.getContentType(), paramEntry.getKey());
+          multiPartBuilder.addBinaryBody(paramEntry.getKey(), (byte[]) value, formContentType, paramEntry.getKey());
         } else {
           Charset charset = contentType.getCharset();
-          ContentEncoding encoding = formContentEncodings.getOrDefault(paramEntry.getKey(), new ContentEncoding(ContentType.DEFAULT_TEXT));
           if (charset != null) {
-            ContentType customContentType = ContentType.create(encoding.getContentType().getMimeType(), charset);
-            //ContentType customContentType = ContentType.create(ContentType.TEXT_PLAIN.getMimeType(), charset);
-            multiPartBuilder.addTextBody(paramEntry.getKey(), parameterToString(paramEntry.getValue()),
-                    customContentType);
+            formContentType = ContentType.create(contentType.getMimeType(), charset);
+            multiPartBuilder.addTextBody(paramEntry.getKey(), parameterToString(paramEntry.getValue()), formContentType);
           } else {
-            multiPartBuilder.addTextBody(paramEntry.getKey(), parameterToString(paramEntry.getValue()), encoding.getContentType());
+            multiPartBuilder.addTextBody(paramEntry.getKey(), parameterToString(paramEntry.getValue()), formContentType);
           }
         }
       }
@@ -880,6 +876,10 @@ public class ApiClient{{#jsr310}} extends JavaTimeFormatter{{/jsr310}} {
           EntityUtils.toString(entity)
       );
     }
+  }
+
+  private ContentType determineContentType(String customContentType, ContentType defaultContentType) {
+    return (customContentType == null) ? defaultContentType : ContentType.create(customContentType);
   }
 
   private File downloadFileFromResponse(CloseableHttpResponse response) throws IOException {
@@ -1065,7 +1065,7 @@ public class ApiClient{{#jsr310}} extends JavaTimeFormatter{{/jsr310}} {
        Map<String, String> headerParams,
        Map<String, String> cookieParams,
        Map<String, Object> formParams,
-       Map<String, ContentEncoding> formContentEncodings,
+       Map<String, String> formContentTypes,
        String accept,
        String contentType,
        String[] authNames,
@@ -1109,7 +1109,7 @@ public class ApiClient{{#jsr310}} extends JavaTimeFormatter{{/jsr310}} {
     if (body != null || !formParams.isEmpty()) {
       if (isBodyAllowed(method)) {
         // Add entity if we have content and a valid method
-        builder.setEntity(serialize(body, formParams, formContentEncodings, contentTypeObj));
+        builder.setEntity(serialize(body, formParams, formContentTypes, contentTypeObj));
       } else {
         throw new ApiException("method " + method + " does not support a request body");
       }
