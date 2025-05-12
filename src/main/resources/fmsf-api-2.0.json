@@ -286,44 +286,13 @@
             "multipart/form-data": {
               "encoding": {
                 "file": {
-                  "contentType": "application/octet-stream,application/zip",
-                  "headers": {
-                    "X-Test": {
-                      "schema": {
-                        "type": "string"
-                      }
-                    },
-                    "X-Test2": {
-                      "schema": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "anotherFile" : {
-                  "contentType": "something/different",
-                  "headers": {
-                    "Y-Test": {
-                      "schema": {
-                        "type": "string"
-                      }
-                    },
-                    "Y-Test2": {
-                      "schema": {
-                        "type": "string"
-                      }
-                    }
-                  }
+                  "contentType": "application/octet-stream,application/zip"
                 }
               },
               "schema": {
                 "type": "object",
                 "properties": {
                   "file": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "anotherFile": {
                     "type": "string",
                     "format": "binary"
                   }

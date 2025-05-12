@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import {{invokerPackage}}.ApiException;
 import {{invokerPackage}}.ApiClient;
-import {{invokerPackage}}.ContentEncoding;
 import {{invokerPackage}}.BaseApi;
 import {{invokerPackage}}.Configuration;
 {{#models.0}}
@@ -63,8 +62,8 @@ public class {{classname}} extends BaseApi {
   {{#isDeprecated}}
   @Deprecated
   {{/isDeprecated}}
-  public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationId}}({{#allParams}}{{>nullable_var_annotations}} {{^isFormParam}}{{{dataType}}} {{paramName}}{{/isFormParam}}{{#isFormParam}}{{{dataType}}} {{paramName}}, ContentEncoding {{paramName}}FormEncoding{{/isFormParam}}{{^-last}}, {{/-last}}{{/allParams}}) throws ApiException {
-    {{#returnType}}return {{/returnType}}this.{{operationId}}({{#allParams}}{{^isFormParam}}{{paramName}}{{/isFormParam}}{{#isFormParam}}{{paramName}}, {{paramName}}FormEncoding{{/isFormParam}}, {{/allParams}}Collections.emptyMap());
+  public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationId}}({{#allParams}}{{>nullable_var_annotations}} {{^isFormParam}}{{{dataType}}} {{paramName}}{{/isFormParam}}{{#isFormParam}}{{{dataType}}} {{paramName}}, String {{paramName}}FormContentType{{/isFormParam}}{{^-last}}, {{/-last}}{{/allParams}}) throws ApiException {
+    {{#returnType}}return {{/returnType}}this.{{operationId}}({{#allParams}}{{^isFormParam}}{{paramName}}{{/isFormParam}}{{#isFormParam}}{{paramName}}, {{paramName}}FormContentType{{/isFormParam}}, {{/allParams}}Collections.emptyMap());
   }
 
 
@@ -90,7 +89,7 @@ public class {{classname}} extends BaseApi {
   {{#isDeprecated}}
   @Deprecated
   {{/isDeprecated}}
-  public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationId}}({{#allParams}}{{>nullable_var_annotations}} {{^isFormParam}}{{{dataType}}} {{paramName}}{{/isFormParam}}{{#isFormParam}}{{{dataType}}} {{paramName}}, {{>nullable_var_annotations}} ContentEncoding {{paramName}}FormEncoding{{/isFormParam}}, {{/allParams}}Map<String, String> additionalHeaders) throws ApiException {
+  public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationId}}({{#allParams}}{{>nullable_var_annotations}} {{^isFormParam}}{{{dataType}}} {{paramName}}{{/isFormParam}}{{#isFormParam}}{{{dataType}}} {{paramName}}, {{>nullable_var_annotations}} String {{paramName}}FormContentType{{/isFormParam}}, {{/allParams}}Map<String, String> additionalHeaders) throws ApiException {
     Object localVarPostBody = {{#bodyParam}}{{paramName}}{{/bodyParam}}{{^bodyParam}}null{{/bodyParam}};
     {{#allParams}}{{#required}}
     // verify the required parameter '{{paramName}}' is set
@@ -109,7 +108,7 @@ public class {{classname}} extends BaseApi {
     Map<String, String> localVarHeaderParams = new HashMap<String, String>();
     Map<String, String> localVarCookieParams = new HashMap<String, String>();
     Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-    Map<String, Object> localVarFormEncodings = new HashMap<String, Object>();
+    Map<String, String> localVarFormContentTypes = new HashMap<String, String>();
 
     {{#queryParams}}
         {{#isDeepObject}}
@@ -162,8 +161,8 @@ public class {{classname}} extends BaseApi {
     {{#formParams}}
     if ({{paramName}} != null) {
       localVarFormParams.put("{{baseName}}", {{paramName}});
-      if ({{paramName}}FormEncoding != null) {
-        localVarFormEncodings.put("{{baseName}}", {{paramName}}FormEncoding);
+      if ({{paramName}}FormContentType != null) {
+        localVarFormContentTypes.put("{{baseName}}", {{paramName}}FormContentType);
       }
     }
     {{/formParams}}
@@ -196,7 +195,7 @@ public class {{classname}} extends BaseApi {
         localVarHeaderParams,
         localVarCookieParams,
         localVarFormParams,
-        localVarFormEncodings,
+        localVarFormContentTypes,
         localVarAccept,
         localVarContentType,
         localVarAuthNames,
@@ -239,6 +238,7 @@ public class {{classname}} extends BaseApi {
         localVarHeaderParams,
         localVarCookieParams,
         localVarFormParams,
+        null,
         localVarAccept,
         localVarContentType,
         localVarAuthNames,

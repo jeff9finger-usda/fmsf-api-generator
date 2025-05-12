@@ -14,7 +14,7 @@
     <version>2.0.0</version>
 
     <properties>
-        <openapi-generate.verbose>true</openapi-generate.verbose>
+        <openapi-generate.verbose>false</openapi-generate.verbose>
         <api.package>gov.firenet.fmsf.api.client</api.package>
         <jackson.version>2.19.0</jackson.version>
     </properties>
@@ -59,7 +59,7 @@
                                     <generateModels>true</generateModels>
                                     <generateModelDocumentation>false</generateModelDocumentation>
                                     <generateModelTests>false</generateModelTests>
-                                    <generateApiDocumentation>true</generateApiDocumentation>
+                                    <generateApiDocumentation>false</generateApiDocumentation>
                                     <generateApis>true</generateApis>
                                     <generateApiTests>false</generateApiTests>
                                     <invokerPackage>${api.package}.apache</invokerPackage>
@@ -102,8 +102,6 @@
                                                 <destinationFilename>src/main/java/gov/firenet/fmsf/api/client/apache/ContentEncoding.java</destinationFilename>
                                             </supportingFile>
                                         </supportingFiles>
-                                        -->
-                                        <!--
                                         <apiFirst>false</apiFirst>
                                         <legacyDiscriminatorBehavior>true</legacyDiscriminatorBehavior>
                                         -->
