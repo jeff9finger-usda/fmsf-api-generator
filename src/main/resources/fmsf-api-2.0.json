@@ -318,7 +318,6 @@
               },
               "schema": {
                 "type": "object",
-                "required": ["file"],
                 "properties": {
                   "file": {
                     "type": "string",
@@ -955,7 +954,6 @@
       "basicAuth": {
         "type": "http",
         "description": "Basic Authentication",
-        "name": "Authorization",
         "scheme": "basic"
       }
     }
