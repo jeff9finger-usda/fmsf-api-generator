@@ -40,8 +40,14 @@
                                     <output>${project.build.directory}/${project.build.finalName}</output>
                                     <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
                                     <!--<templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>-->
+                                    <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <generatorName>postman-collection</generatorName>
                                     <verbose>${openapi-generate.verbose}</verbose>
+                                    <globalProperties>
+                                        <debugOpenAPI>${openapi-generate.verbose}</debugOpenAPI>
+                                        <debugOperations>${openapi-generate.verbose}</debugOperations>
+                                        <debugSupportingFiles>${openapi-generate.verbose}</debugSupportingFiles>
+                                    </globalProperties>
                                     <configOptions>
                                         <skipFormModel>false</skipFormModel>
                                         <folderStrategy>paths</folderStrategy>

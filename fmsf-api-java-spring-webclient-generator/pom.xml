@@ -53,9 +53,9 @@
                                         <debugOperations>${openapi-generate.verbose}</debugOperations>
                                         <debugSupportingFiles>${openapi-generate.verbose}</debugSupportingFiles>
                                     </globalProperties>
-<!--                                    <enablePostProcessFile>false</enablePostProcessFile>-->
                                     <configOptions>
                                         <annotationLibrary>swagger2</annotationLibrary>
+                                        <apiFirst>false</apiFirst>
                                         <apiPackage>${api.package}</apiPackage>
                                         <artifactId>${project.build.finalName}</artifactId>
                                         <artifactDescription>FMSF API Spring Web Client SDK</artifactDescription>
@@ -82,7 +82,7 @@
                                         <generateBuilders>true</generateBuilders>
                                         <groupId>${project.parent.groupId}</groupId>
                                         <httpUserAgent>${project.build.finalName}/${project.version}/java</httpUserAgent>
-                                        <invokerPackage>${api.package}.webclient</invokerPackage>
+                                        <invokerPackage>${api.package}.spring</invokerPackage>
                                         <library>webclient</library>
                                         <modelPackage>${api.package}.dto</modelPackage>
                                         <openApiNullable>true</openApiNullable>
@@ -99,10 +99,6 @@
                                         <useRuntimeException>true</useRuntimeException>
                                         <useBeanValidation>true</useBeanValidation>
                                         <webclientBlockingOperations>true</webclientBlockingOperations>
-                                        <!--
-                                        <apiFirst>false</apiFirst>
-                                        <legacyDiscriminatorBehavior>true</legacyDiscriminatorBehavior>
-                                        -->
                                     </configOptions>
                                 </configuration>
                             </execution>
