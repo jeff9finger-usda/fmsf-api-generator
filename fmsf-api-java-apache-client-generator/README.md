@@ -6,7 +6,6 @@ import gov.firenet.fmsf.api.client.ResourceControllerApi;
 import gov.firenet.fmsf.api.client.apache.ApiClient;
 import gov.firenet.fmsf.api.client.dto.ModelMetadataDto;
 import gov.firenet.fmsf.api.client.dto.ResourceMetadataDto;
-
 import java.io.File;
 import java.util.Set;
 import java.util.logging.Level;
@@ -16,15 +15,14 @@ class FmsfApiClient {
     private final static Logger LOGGER = Logger.getLogger(FmsfApiClient.class.getName());
     public static void main(String[] args) throws InterruptedException {
         ApiClient client = new ApiClient();
-        client.setBasePath("https://fmsf2-qa.firenet.gov/api"); // only if using non production
-        client.setUsername("<user_name>");
-        client.setPassword("<api_key>");
-        client.setDebugging(true);
+        client.setBasePath("https://fmsf2.firenet.gov/api");
+        client.setUsername("<user-name>);
+        client.setPassword("<api-key>");
         ResourceControllerApi resourceControllerApi = new ResourceControllerApi(client);
         ModelControllerApi modelControllerApi = new ModelControllerApi(client);
 
-        final ResourceMetadataDto geotiffResource = resourceControllerApi.getResourceMetadata(207L);
-        LOGGER.log(Level.INFO, "Landscape resource: " + geotiffResource);
+        File landscapeFile = new File("<absolute-path-to-geotiff-file-folder>/BoiseLandscape.zip");
+        geotiffResource = resourceControllerApi.upload(ResourceMetadataDto.ResourceTypeEnum.GEOTIFF.getValue(), landscapeFile);
 
         Long landscapeId;
         if (geotiffResource != null && geotiffResource.getId() != null) {
@@ -32,12 +30,11 @@ class FmsfApiClient {
         } else {
             return;
         }
-        File inputfile = new File("/home/vmuser1/github/fmsf/fmsf-refactored-guacamole/src/test/resources/testfiles/inputfiles/flam_fm1_winds.txt");
+        File inputfile = new File("<absolute-path-to-input-file-folder>/flam_fm1_winds.txt");
         final ModelMetadataDto modelRun =
                 modelControllerApi.uploadModel(
                         ModelMetadataDto.ModelTypeEnum.FLAM.getValue(),
-                        landscapeId, 0L, 0L, 0L, 0L,
-                        inputfile);
+                        landscapeId, inputfile, 0L, 0L, 0L, 0L);
         LOGGER.log(Level.INFO, "ModelRun: " + modelRun);
 
         if (modelRun != null && modelRun.getRunId() != null) {
@@ -48,7 +45,7 @@ class FmsfApiClient {
             ModelMetadataDto statusModelRun;
             do {
                 statusModelRun = modelControllerApi.getModelMetadata(modelRunId);
-                LOGGER.log(Level.INFO, "ModelRun Status: " + statusModelRun.getRunStatus() + " - " + statusModelRun.getStatusMsg());
+                LOGGER.log(Level.INFO, "ModelRun Status: " + statusModelRun.getRunStatus());
                 Thread.onSpinWait();
                 Thread.sleep(10000);
             } while (--retries > 0 || runningStatuses.contains(statusModelRun.getRunStatus()));

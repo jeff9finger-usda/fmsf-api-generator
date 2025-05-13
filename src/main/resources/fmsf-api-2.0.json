@@ -297,10 +297,6 @@
                   "file": {
                     "type": "string",
                     "format": "binary"
-                  },
-                  "anotherFile": {
-                    "type": "string",
-                    "format": "binary"
                   }
                 }
               }

@@ -4,13 +4,16 @@
 The intent of the project is to provide generated SDK artifacts from the FMSF v2 OpenAPI document, that can be used to integrate API consumer with this service.
 The OpenAPI generator has many options and the SDKs generated here were selected for our immediate clients, but you may use the structure to generated your own SDK according to your needs.
 
-### Generated SDKs:
+### Generated Client SDKs:
 - Java using Apache HTTP Client
 - Java using Spring WebClient
 - Java using Jersey 3 and Java HTTP client (TODO)
 - Postman Collection
-- TypeScript-Angular
-- TypeScript-Node
+- TypeScript-Angular (TODO)
+- TypeScript-Node (TODO)
+
+### Generated Server Artifacts:
+- Java using SpringBoot Server (Not Tested)
 
 ------
 ##### What's OpenAPI
