@@ -136,6 +136,7 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
+                "required": ["file"],
                 "properties": {
                   "file": {
                     "type": "string",
@@ -286,13 +287,18 @@
             "multipart/form-data": {
               "encoding": {
                 "file": {
-                  "contentType": "application/octet-stream,application/zip"
+                  "contentType": "application/octet-stream,application/zip,text/plain"
                 }
               },
               "schema": {
                 "type": "object",
+                "required": ["file"],
                 "properties": {
                   "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "anotherFile": {
                     "type": "string",
                     "format": "binary"
                   }

@@ -45,9 +45,9 @@
         <module>fmsf-api-java-apache-client-generator</module>
         <module>fmsf-api-java-spring-webclient-generator</module>
         <module>fmsf-api-java-jersey3-client-generator</module>
+        <module>fmsf-api-java-spring-boot-server-generator</module>
         <module>fmsf-api-postman-collection-generator</module>
         <module>fmsf-api-typescript-angular-generator</module>
         <module>fmsf-api-typescript-node-generator</module>
-        <!--<module>fmsf-api-client-iftdss</module>-->
     </modules>
 </project>

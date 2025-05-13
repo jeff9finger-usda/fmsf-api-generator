@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.firenet.fmsf</groupId>
+        <artifactId>fmsf-api-generator</artifactId>
+        <version>2.0.0</version>
+        <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
+    </parent>
+    <packaging>pom</packaging>
+    <artifactId>fmsf-api-java-spring-boot-server-generator</artifactId>
+    <version>2.0.0</version>
+
+    <properties>
+        <openapi-generate.verbose>false</openapi-generate.verbose>
+        <api.package>gov.firenet.fmsf.api</api.package>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>generate-java-spring-boot-server</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+            </properties>
+            <build>
+                <finalName>fmsf-api-spring-boot-server</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openapitools</groupId>
+                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>generate-java-spring-boot-server</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- <library>spring-boot</library>-->
+                                    <output>${project.build.directory}/generated-sources/${project.build.finalName}</output>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
+                                    <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java-spring</templateDirectory>
+                                    <additionalProperties>javaCompilerVersion=${java.version}</additionalProperties>
+                                    <generatorName>spring</generatorName>
+                                    <verbose>${openapi-generate.verbose}</verbose>
+                                    <globalProperties>
+                                        <debugOpenAPI>${openapi-generate.verbose}</debugOpenAPI>
+                                        <debugOperations>${openapi-generate.verbose}</debugOperations>
+                                        <debugModels>${openapi-generate.verbose}</debugModels>
+                                        <debugSupportingFiles>${openapi-generate.verbose}</debugSupportingFiles>
+                                    </globalProperties>
+                                    <configOptions>
+                                        <!--<annotationLibrary>swagger2</annotationLibrary> Not needed when "documentationProvider" = "springdoc" -->
+                                        <!--
+                                            when apiFirst == true, the code is generated in "sourceFolder". If it is used,
+                                            the subsequent execution of mvn install (below) is not needed and indeed the
+                                            build will fail.
+                                        -->
+                                        <apiFirst>false</apiFirst>
+                                        <apiPackage>${api.package}</apiPackage>
+                                        <artifactDescription>FMSF API Spring Boot Server</artifactDescription>
+                                        <artifactId>${project.build.finalName}</artifactId>
+                                        <artifactVersion>${project.version}</artifactVersion>
+                                        <basePackage>${api.package}.controller</basePackage>
+                                        <configPackage>${api.package}.config</configPackage>
+                                        <containerDefaultToNull>false</containerDefaultToNull>
+                                        <dateLibrary>java8</dateLibrary>
+                                        <developerName>FMSF API Team</developerName>
+                                        <developerEmail>admins@fmsf.firenet.gov</developerEmail>
+                                        <developerOrganization>DOI FMSF API</developerOrganization>
+                                        <documentationProvider>springdoc</documentationProvider>
+                                        <ensureUniqueParams>true</ensureUniqueParams>
+                                        <enumUnknownDefaultCase>true</enumUnknownDefaultCase>
+                                        <generateBuilders>true</generateBuilders>
+                                        <groupId>${project.groupId}</groupId>
+                                        <interfaceOnly>true</interfaceOnly> <!-- TODO -->
+                                        <invokerPackage>${api.package}</invokerPackage>
+                                        <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior> <!-- on when inheritance is used -->
+                                        <library>spring-boot</library>
+                                        <licenseName>DOI</licenseName> <!-- TODO -->
+                                        <licenseUrl>foo</licenseUrl> <!-- TODO -->
+                                        <modelPackage>${api.package}.dto</modelPackage>
+                                        <openApiNullable>true</openApiNullable>
+                                        <optionalAcceptNullable>true</optionalAcceptNullable>
+                                        <prependFormOrBodyParameters>true</prependFormOrBodyParameters>
+                                        <performBeanValidation>true</performBeanValidation>
+                                        <requestMappingMode>api_interface</requestMappingMode>
+                                        <serializableModel>true</serializableModel>
+                                        <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
+                                        <sortParamsByRequiredFlag>true</sortParamsByRequiredFlag>
+                                        <!--<sourceFolder>src/main/java</sourceFolder>-->
+                                        <unhandledException>true</unhandledException>
+                                        <title>FMSF API SpringBoot Server</title>
+                                        <useBeanValidation>true</useBeanValidation>
+                                        <useJakartaEe>true</useJakartaEe>
+                                        <useResponseEntity>true</useResponseEntity>
+                                        <useSpringBoot3>true</useSpringBoot3>
+                                        <useSpringBuiltInValidation>true</useSpringBuiltInValidation>
+                                        <useSpringController>true</useSpringController>
+                                        <useSwaggerUI>true</useSwaggerUI>
+                                        <!--
+                                        <cleanupOutput>true</cleanupOutput>
+                                        <generateModels>true</generateModels>
+                                        <generateModelDocumentation>false</generateModelDocumentation>
+                                        <generateModelTests>false</generateModelTests>
+                                        <generateApiDocumentation>true</generateApiDocumentation>
+                                        <generateApis>true</generateApis>
+                                        <generateApiTests>false</generateApiTests>
+                                        <generateSupportingFiles>true</generateSupportingFiles>
+                                        <enablePostProcessFile>false</enablePostProcessFile>
+                                        <httpUserAgent>${project.build.finalName}/${project.version}/java</httpUserAgent>
+                                        -->
+                                    </configOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Prevent attempt to compile this project - there is not java code -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.11.0</version>
+                        <executions>
+                            <execution>
+                                <id>default-compile</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>java-spring-boot-server</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <workingDirectory>${project.build.directory}/generated-sources/${project.build.finalName}</workingDirectory>
+                            <executable>mvn</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

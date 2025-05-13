@@ -46,7 +46,7 @@
                                     <library>apache-httpclient</library>
                                     <output>${project.build.directory}/generated-sources/${project.build.finalName}</output>
                                     <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
-                                    <templateDirectory>${project.parent.basedir}/src/main/resources/templates/Java</templateDirectory>
+                                    <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <additionalProperties>apacheHttpClientVersion=${apache-httpclient-version},javaCompilerVersion=${java.version},jacksonVersion=${jackson.version},jacksonDatabindNullVersion=${jackson-databind-nullable.version}</additionalProperties>
                                     <generatorName>java</generatorName>
                                     <verbose>${openapi-generate.verbose}</verbose>
@@ -98,7 +98,7 @@
                                         <!--
                                         <supportingFiles>
                                             <supportingFile>
-                                                <templateFile>templates/Java/libraries/apache-httpclient/ContentEncoding.mustache</templateFile>
+                                                <templateFile>templates/java/libraries/apache-httpclient/ContentEncoding.mustache</templateFile>
                                                 <destinationFilename>src/main/java/gov/firenet/fmsf/api/client/apache/ContentEncoding.java</destinationFilename>
                                             </supportingFile>
                                         </supportingFiles>

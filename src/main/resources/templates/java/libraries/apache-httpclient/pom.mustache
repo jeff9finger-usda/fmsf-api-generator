@@ -45,14 +45,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
                 <configuration>
-                    {{^javaCompilerVersion}}
-                    <source>11</source>
-                    <target>11</target>
-                    {{/javaCompilerVersion}}
-                    {{#javaCompilerVersion}}
-                    <source>{{javaCompilerVersion}}</source>
-                    <target>{{javaCompilerVersion}}</target>
-                    {{/javaCompilerVersion}}
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
                     <fork>true</fork>
                     <meminitial>128m</meminitial>
                     <maxmem>512m</maxmem>
@@ -367,6 +361,12 @@
         {{#apacheHttpClientVersion}}
         <httpclient-version>{{apacheHttpClientVersion}}</httpclient-version>
         {{/apacheHttpClientVersion}}
+        {{^javaCompilerVersion}}
+        <java-version>1.8</java-version>
+        {{/javaCompilerVersion}}
+        {{#javaCompilerVersion}}
+        <java-version>{{javaCompilerVersion}}</java-version>
+        {{/javaCompilerVersion}}
         {{^jacksonVersion}}
         <jackson-version>2.17.1</jackson-version>
         <jackson-databind-version>2.17.1</jackson-databind-version>
