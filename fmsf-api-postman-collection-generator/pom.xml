@@ -39,7 +39,7 @@
                                 <configuration>
                                     <output>${project.build.directory}/${project.build.finalName}</output>
                                     <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
-                                    <!--<templateDirectory>${project.parent.basedir}/src/main/resources/templates/Java</templateDirectory>-->
+                                    <!--<templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>-->
                                     <generatorName>postman-collection</generatorName>
                                     <verbose>${openapi-generate.verbose}</verbose>
                                     <configOptions>
