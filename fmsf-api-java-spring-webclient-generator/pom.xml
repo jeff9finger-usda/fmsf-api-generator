@@ -44,7 +44,7 @@
                                 <configuration>
                                     <generatorName>java</generatorName>
                                     <output>${project.build.directory}/generated-sources/${project.build.finalName}</output>
-                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.yaml</inputSpec>
                                     <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <additionalProperties>javaCompilerVersion=${java.version},jacksonVersion=${jackson.version},jacksonDatabindNullVersion=${jackson-databind-nullable.version}</additionalProperties>
                                     <verbose>${openapi-generate.verbose}</verbose>
@@ -53,12 +53,17 @@
                                         <debugOperations>${openapi-generate.verbose}</debugOperations>
                                         <debugSupportingFiles>${openapi-generate.verbose}</debugSupportingFiles>
                                     </globalProperties>
+                                    <gitHost>github.com</gitHost>
+                                    <gitRepoId>${project.build.finalName}</gitRepoId>
+                                    <gitUserId>${github-user-id}</gitUserId>
                                     <configOptions>
+                                        <apiFirst>false</apiFirst>
                                         <annotationLibrary>swagger2</annotationLibrary>
                                         <apiFirst>false</apiFirst>
                                         <apiPackage>${api.package}</apiPackage>
                                         <artifactId>${project.build.finalName}</artifactId>
-                                        <artifactDescription>FMSF API Spring Web Client SDK</artifactDescription>
+                                        <!-- version here depends on setting for "useJakarta" -->
+                                        <artifactDescription>FMSF API Spring Web Client (3.0.12) SDK</artifactDescription>
                                         <artifactVersion>${project.version}</artifactVersion>
                                         <cleanupOutput>true</cleanupOutput>
                                         <containerDefaultToNull>false</containerDefaultToNull>

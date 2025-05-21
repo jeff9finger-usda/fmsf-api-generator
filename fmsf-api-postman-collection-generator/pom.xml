@@ -38,8 +38,7 @@
                                 </goals>
                                 <configuration>
                                     <output>${project.build.directory}/${project.build.finalName}</output>
-                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
-                                    <!--<templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>-->
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.yaml</inputSpec>
                                     <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <generatorName>postman-collection</generatorName>
                                     <verbose>${openapi-generate.verbose}</verbose>
@@ -61,28 +60,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!--
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>postman-collection</id>
-                                <phase>process-sources</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <workingDirectory>${project.build.directory}/generated-sources/${project.build.finalName}</workingDirectory>
-                            <executable>mvn</executable>
-                            <arguments>
-                                <argument>install</argument>
-                            </arguments>
-                        </configuration>
-                    </plugin>
-                    -->
                 </plugins>
             </build>
         </profile>
