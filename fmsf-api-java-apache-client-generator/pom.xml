@@ -91,11 +91,15 @@
                                         <performBeanValidation>false</performBeanValidation>
                                         <requestMappingMode>api_interface</requestMappingMode>
                                         <title>FMSF API Client</title>
-                                        <serializationLibrary>jackson</serializationLibrary>
-                                        <serializableModel>true</serializableModel>
-                                        <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
-                                        <sortParamsByRequiredFlag>true</sortParamsByRequiredFlag>
                                         <sourceDirectory>src/main/java</sourceDirectory>
+                                        <artifactDescription>FMSF API Apache HTTP Client SDK</artifactDescription>
+                                        <dateLibrary>java8-localdatetime</dateLibrary>
+                                        <requestMappingMode>api_interface</requestMappingMode>
+                                        <failOnUnknownProperties>false</failOnUnknownProperties>
+                                        <serializationLibrary>jackson</serializationLibrary>
+                                        <generateBuilders>true</generateBuilders>
+                                        <ensureUniqueParams>true</ensureUniqueParams>
+                                        <useRuntimeException>true</useRuntimeException>
                                         <useBeanValidation>true</useBeanValidation>
                                         <useJakartaEe>false</useJakartaEe>
                                         <useRuntimeException>true</useRuntimeException>

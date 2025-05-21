@@ -59,7 +59,6 @@
                                     <configOptions>
                                         <apiFirst>false</apiFirst>
                                         <annotationLibrary>swagger2</annotationLibrary>
-                                        <apiFirst>false</apiFirst>
                                         <apiPackage>${api.package}</apiPackage>
                                         <artifactId>${project.build.finalName}</artifactId>
                                         <!-- version here depends on setting for "useJakarta" -->
@@ -87,7 +86,7 @@
                                         <generateBuilders>true</generateBuilders>
                                         <groupId>${project.parent.groupId}</groupId>
                                         <httpUserAgent>${project.build.finalName}/${project.version}/java</httpUserAgent>
-                                        <invokerPackage>${api.package}.spring</invokerPackage>
+                                        <invokerPackage>${api.package}.webclient</invokerPackage>
                                         <library>webclient</library>
                                         <modelPackage>${api.package}.dto</modelPackage>
                                         <openApiNullable>true</openApiNullable>

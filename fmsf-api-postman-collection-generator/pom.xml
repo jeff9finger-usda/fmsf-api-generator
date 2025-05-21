@@ -42,11 +42,6 @@
                                     <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <generatorName>postman-collection</generatorName>
                                     <verbose>${openapi-generate.verbose}</verbose>
-                                    <globalProperties>
-                                        <debugOpenAPI>${openapi-generate.verbose}</debugOpenAPI>
-                                        <debugOperations>${openapi-generate.verbose}</debugOperations>
-                                        <debugSupportingFiles>${openapi-generate.verbose}</debugSupportingFiles>
-                                    </globalProperties>
                                     <configOptions>
                                         <skipFormModel>false</skipFormModel>
                                         <folderStrategy>paths</folderStrategy>
