@@ -26,7 +26,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <apache-httpclient-version>5.4.4</apache-httpclient-version>
+                <apache-httpclient.version>5.4.4</apache-httpclient.version>
                 <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
             </properties>
             <build>
@@ -44,9 +44,9 @@
                                 </goals>
                                 <configuration>
                                     <output>${project.build.directory}/generated-sources/${project.build.finalName}</output>
-                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.yaml</inputSpec>
                                     <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
-                                    <additionalProperties>apacheHttpClientVersion=${apache-httpclient-version},javaCompilerVersion=${java.version},jacksonVersion=${jackson.version},jacksonDatabindNullVersion=${jackson-databind-nullable.version}</additionalProperties>
+                                    <additionalProperties>apacheHttpClientVersion=${apache-httpclient.version},javaCompilerVersion=${java.version},jacksonVersion=${jackson.version},jacksonDatabindNullVersion=${jackson-databind-nullable.version}</additionalProperties>
                                     <generatorName>java</generatorName>
                                     <verbose>${openapi-generate.verbose}</verbose>
                                     <globalProperties>
@@ -54,10 +54,14 @@
                                         <debugOperations>${openapi-generate.verbose}</debugOperations>
                                         <debugSupportingFiles>${openapi-generate.verbose}</debugSupportingFiles>
                                     </globalProperties>
+                                    <gitHost>github.com</gitHost>
+                                    <gitRepoId>${project.build.finalName}</gitRepoId>
+                                    <gitUserId>${github-user-id}</gitUserId>
                                     <configOptions>
                                         <annotationLibrary>swagger2</annotationLibrary>
+                                        <apiFirst>false</apiFirst>
                                         <apiPackage>${api.package}</apiPackage>
-                                        <artifactDescription>FMSF API Apache HTTP Client SDK</artifactDescription>
+                                        <artifactDescription>FMSF API Apache HTTP (${apache-httpclient.version}) Client SDK</artifactDescription>
                                         <artifactId>${project.build.finalName}</artifactId>
                                         <artifactVersion>${project.version}</artifactVersion>
                                         <cleanupOutput>true</cleanupOutput>
@@ -80,30 +84,25 @@
                                         <groupId>${project.groupId}</groupId>
                                         <httpUserAgent>${project.build.finalName}/${project.version}/java</httpUserAgent>
                                         <invokerPackage>${api.package}.apache</invokerPackage>
+                                        <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
                                         <library>apache-httpclient</library>
                                         <modelPackage>${api.package}.dto</modelPackage>
                                         <openApiNullable>true</openApiNullable>
                                         <performBeanValidation>false</performBeanValidation>
                                         <requestMappingMode>api_interface</requestMappingMode>
                                         <title>FMSF API Client</title>
-                                        <serializationLibrary>jackson</serializationLibrary>
-                                        <serializableModel>true</serializableModel>
-                                        <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
-                                        <sortParamsByRequiredFlag>true</sortParamsByRequiredFlag>
                                         <sourceDirectory>src/main/java</sourceDirectory>
+                                        <artifactDescription>FMSF API Apache HTTP Client SDK</artifactDescription>
+                                        <dateLibrary>java8-localdatetime</dateLibrary>
+                                        <requestMappingMode>api_interface</requestMappingMode>
+                                        <failOnUnknownProperties>false</failOnUnknownProperties>
+                                        <serializationLibrary>jackson</serializationLibrary>
+                                        <generateBuilders>true</generateBuilders>
+                                        <ensureUniqueParams>true</ensureUniqueParams>
+                                        <useRuntimeException>true</useRuntimeException>
                                         <useBeanValidation>true</useBeanValidation>
                                         <useJakartaEe>false</useJakartaEe>
                                         <useRuntimeException>true</useRuntimeException>
-                                        <!--
-                                        <supportingFiles>
-                                            <supportingFile>
-                                                <templateFile>templates/java/libraries/apache-httpclient/ContentEncoding.mustache</templateFile>
-                                                <destinationFilename>src/main/java/gov/firenet/fmsf/api/client/apache/ContentEncoding.java</destinationFilename>
-                                            </supportingFile>
-                                        </supportingFiles>
-                                        <apiFirst>false</apiFirst>
-                                        <legacyDiscriminatorBehavior>true</legacyDiscriminatorBehavior>
-                                        -->
                                     </configOptions>
                                 </configuration>
                             </execution>

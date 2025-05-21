@@ -44,54 +44,61 @@
                                 <configuration>
                                     <library>jersey3</library>
                                     <output>${project.build.directory}/generated-sources/${project.build.finalName}</output>
-                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.yaml</inputSpec>
                                     <generatorName>java</generatorName>
                                     <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <additionalProperties>jerseyVersion=${jersey.version},javaCompilerVersion=${java.version},jacksonVersion=${jackson.version}</additionalProperties>
                                     <verbose>${openapi-generate.verbose}</verbose>
-                                    <cleanupOutput>true</cleanupOutput>
-                                    <generateModels>true</generateModels>
-                                    <generateModelDocumentation>false</generateModelDocumentation>
-                                    <generateModelTests>false</generateModelTests>
-                                    <generateApiDocumentation>true</generateApiDocumentation>
-                                    <generateApis>true</generateApis>
-                                    <generateApiTests>false</generateApiTests>
-                                    <invokerPackage>${api.package}.jersey3</invokerPackage>
-                                    <apiPackage>${api.package}</apiPackage>
-                                    <modelPackage>${api.package}.dto</modelPackage>
-                                    <groupId>${project.parent.groupId}</groupId>
-                                    <artifactId>${project.build.finalName}</artifactId>
-                                    <artifactVersion>${project.version}</artifactVersion>
-                                    <generateSupportingFiles>true</generateSupportingFiles>
-                                    <enablePostProcessFile>false</enablePostProcessFile>
-                                    <httpUserAgent>${project.build.finalName}/${project.version}/java</httpUserAgent>
+                                    <globalProperties>
+                                        <debugOpenAPI>${openapi-generate.verbose}</debugOpenAPI>
+                                        <debugOperations>${openapi-generate.verbose}</debugOperations>
+                                        <debugSupportingFiles>${openapi-generate.verbose}</debugSupportingFiles>
+                                    </globalProperties>
+                                    <gitHost>github.com</gitHost>
+                                    <gitRepoId>${project.build.finalName}</gitRepoId>
+                                    <gitUserId>${github-user-id}</gitUserId>
                                     <configOptions>
-                                        <title>FMSF API Client</title>
-                                        <sourceDirectory>src/main/java</sourceDirectory>
-                                        <artifactDescription>FMSF API Jersey 3 Client SDK</artifactDescription>
-                                        <dateLibrary>java8-localdatetime</dateLibrary>
-                                        <requestMappingMode>api_interface</requestMappingMode>
-                                        <failOnUnknownProperties>false</failOnUnknownProperties>
-                                        <serializationLibrary>jackson</serializationLibrary>
-                                        <generateBuilders>true</generateBuilders>
-                                        <ensureUniqueParams>true</ensureUniqueParams>
-                                        <useRuntimeException>true</useRuntimeException>
-                                        <useBeanValidation>false</useBeanValidation>
-                                        <performBeanValidation>false</performBeanValidation>
-                                        <sortParamsByRequiredFlag>true</sortParamsByRequiredFlag>
-                                        <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
-                                        <openApiNullable>true</openApiNullable>
-                                        <serializableModel>true</serializableModel>
-                                        <enumUnknownDefaultCase>false</enumUnknownDefaultCase>
-                                        <generateBuilders>true</generateBuilders>
                                         <annotationLibrary>swagger2</annotationLibrary>
+                                        <apiFirst>false</apiFirst>
+                                        <apiPackage>${api.package}</apiPackage>
+                                        <artifactDescription>FMSF API Jersey (${jersey.version}) Client SDK</artifactDescription>
+                                        <artifactId>${project.build.finalName}</artifactId>
+                                        <artifactVersion>${project.version}</artifactVersion>
+                                        <cleanupOutput>true</cleanupOutput>
+                                        <dateLibrary>java8-localdatetime</dateLibrary>
                                         <developerName>FMSF API Team</developerName>
                                         <developerEmail>admins@fmsf.firenet.gov</developerEmail>
                                         <developerOrganization>DOI FMSF API</developerOrganization>
-                                        <!--
-                                        <apiFirst>false</apiFirst>
-                                        <legacyDiscriminatorBehavior>true</legacyDiscriminatorBehavior>
-                                        -->
+                                        <enablePostProcessFile>false</enablePostProcessFile>
+                                        <ensureUniqueParams>true</ensureUniqueParams>
+                                        <enumUnknownDefaultCase>false</enumUnknownDefaultCase>
+                                        <failOnUnknownProperties>false</failOnUnknownProperties>
+                                        <generateBuilders>true</generateBuilders>
+                                        <generateModels>true</generateModels>
+                                        <generateModelDocumentation>false</generateModelDocumentation>
+                                        <generateModelTests>false</generateModelTests>
+                                        <generateApis>true</generateApis>
+                                        <generateApiDocumentation>false</generateApiDocumentation>
+                                        <generateApiTests>false</generateApiTests>
+                                        <generateSupportingFiles>true</generateSupportingFiles>
+                                        <groupId>${project.groupId}</groupId>
+                                        <httpUserAgent>${project.build.finalName}/${project.version}/java</httpUserAgent>
+                                        <invokerPackage>${api.package}.jersey3</invokerPackage>
+                                        <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
+                                        <library>apache-httpclient</library>
+                                        <modelPackage>${api.package}.dto</modelPackage>
+                                        <openApiNullable>true</openApiNullable>
+                                        <performBeanValidation>false</performBeanValidation>
+                                        <requestMappingMode>api_interface</requestMappingMode>
+                                        <title>FMSF API Client</title>
+                                        <serializationLibrary>jackson</serializationLibrary>
+                                        <serializableModel>true</serializableModel>
+                                        <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
+                                        <sortParamsByRequiredFlag>true</sortParamsByRequiredFlag>
+                                        <sourceDirectory>src/main/java</sourceDirectory>
+                                        <useBeanValidation>true</useBeanValidation>
+                                        <useJakartaEe>false</useJakartaEe>
+                                        <useRuntimeException>true</useRuntimeException>
                                     </configOptions>
                                 </configuration>
                             </execution>
