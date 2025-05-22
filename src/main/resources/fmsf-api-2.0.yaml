@@ -236,6 +236,63 @@ paths:
       summary: Run a model
       tags:
       - model-controller
+  /model/{id}/reinitialize:
+    x-hidden: true # Internal only
+    post:
+      description: Effectively retries a failed or canceled model run by setting the
+        status to INIT.
+      operationId: reinitializeModelRun
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Specified model run does not exist
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelMetadataDto'
+          description: The specified ModelRun has been successfully reinitialized
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: The specified model run is not failed or canceled status
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to retry a model run
+      security:
+      - basicAuth: []
+      summary: Reinitialize a model run
+      tags:
+      - model-controller
   /resource/{id}:
     get:
       operationId: download
