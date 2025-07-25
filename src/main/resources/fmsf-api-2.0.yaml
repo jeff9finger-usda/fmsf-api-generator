@@ -11,13 +11,13 @@ security:
 paths:
   /model/{id}/cancel:
     put:
-      description: "Models that produce intermediate results, e.g. RANDIG or FSPro,\
-        \ will not do so."
+      x-audience:
+        - public
+      description: "Models that produce intermediate results, e.g. RANDIG or FSPro, will not do so."
       operationId: cancelRun
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -67,12 +67,13 @@ paths:
       - model-controller
   /resource:
     post:
+      x-audience:
+        - public
       description: "Resources are auxiliary files that fire behavior models need in\
         \ order to run, e.g. geotiff landscapes or barrier shapefiles"
       operationId: upload
       parameters:
-      - explode: true
-        in: query
+      - in: query
         name: type
         required: true
         schema:
@@ -124,14 +125,14 @@ paths:
       - resource-controller
   /model:
     post:
+      x-audience:
+        - public
       description: Resource IDs refer to previously-uploaded resources
       operationId: uploadModel
       parameters:
-      - description: "Which model type to run, valid values: FLAM, MTT_, RNDG, FSPR,\
-          \ FARS."
-        explode: true
+      - name: type
+        description: "Which model type to run, valid values: FLAM, MTT_, RNDG, FSPR, FARS."
         in: query
-        name: type
         required: true
         schema:
           enum:
@@ -142,48 +143,42 @@ paths:
           - FSPR
           type: string
         style: form
-      - description: Landscape ID. Enter ID returned from /resource endpoint.
-        explode: true
+      - name: landscape
+        description: Landscape ID. Enter ID returned from /resource endpoint.
         in: query
-        name: landscape
         required: true
         schema:
           format: int64
           type: integer
         style: form
-      - description: Ignition ID. Enter ID returned from /resource endpoint.
-        explode: true
+      - name: ignition
+        description: Ignition ID. Enter ID returned from /resource endpoint.
         in: query
-        name: ignition
         required: false
         schema:
           format: int64
           type: integer
         style: form
-      - description: Barrier ID. Enter ID returned from /resource endpoint.
-        explode: true
+      - name: barrier
+        description: Barrier ID. Enter ID returned from /resource endpoint.
         in: query
-        name: barrier
         required: false
         schema:
           format: int64
           type: integer
         style: form
-      - description: "Gridded Wind Speed ID. Enter ID returned from /resource endpoint.\
+      - name: griddedWindSpeed
+        description: "Gridded Wind Speed ID. Enter ID returned from /resource endpoint.\
           \ Only available for use with FLAM, MTT_ and RNDG."
-        explode: true
         in: query
-        name: griddedWindSpeed
         required: false
         schema:
           format: int64
           type: integer
         style: form
-      - description: "Gridded Wind Direction ID. Enter ID returned from /resource\
-          \ endpoint. Only available for use with FLAM, MTT_ and RNDG."
-        explode: true
+      - name: griddedWindDir
+        description: "Gridded Wind Direction ID. Enter ID returned from /resource  endpoint. Only available for use with FLAM, MTT_ and RNDG."
         in: query
-        name: griddedWindDir
         required: false
         schema:
           format: int64
@@ -237,15 +232,16 @@ paths:
       tags:
       - model-controller
   /model/{id}/reinitialize:
-    x-hidden: true # Internal only
     post:
+      x-audience: # options: public, (internal, admin, private, ??)?
+        - internal
+      #x-hidden: true
       description: Effectively retries a failed or canceled model run by setting the
         status to INIT.
       operationId: reinitializeModelRun
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -295,11 +291,12 @@ paths:
       - model-controller
   /resource/{id}:
     get:
+      x-audience:
+        - public
       operationId: download
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -341,11 +338,12 @@ paths:
       - resource-controller
   /resource/{id}/metadata:
     get:
+      x-audience:
+        - public
       operationId: getResourceMetadata
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -389,11 +387,12 @@ paths:
       - resource-controller
   /model/{id}:
     get:
+      x-audience:
+        - public
       operationId: downloadModel
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -435,16 +434,17 @@ paths:
       - model-controller
   /model/{id}/metadata:
     get:
+      x-audience:
+        - public
       operationId: getModelMetadata
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int64
-          type: integer
-        style: simple
+        - name: id
+          in: path
+          required: true
+          schema:
+            format: int64
+            type: integer
+          style: simple
       responses:
         "403":
           content:
@@ -483,11 +483,12 @@ paths:
       - model-controller
   /model/{id}/input:
     get:
+      x-audience:
+        - public
       operationId: getInputFile
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -700,6 +701,5 @@ components:
   securitySchemes:
     basicAuth:
       description: Basic Authentication
-      name: Authorization
       scheme: basic
       type: http
