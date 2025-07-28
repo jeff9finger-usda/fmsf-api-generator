@@ -3,7 +3,7 @@
 ```java
 import gov.firenet.fmsf.api.client.ModelControllerApi;
 import gov.firenet.fmsf.api.client.ResourceControllerApi;
-import gov.firenet.fmsf.api.client.apache.ApiClient; // TODO - change to jersey
+import gov.firenet.fmsf.api.client.jersey3.ApiClient;
 import gov.firenet.fmsf.api.client.dto.ModelMetadataDto;
 import gov.firenet.fmsf.api.client.dto.ResourceMetadataDto;
 import java.io.File;
@@ -16,8 +16,8 @@ class FmsfApiClient {
     public static void main(String[] args) throws InterruptedException {
         ApiClient client = new ApiClient();
         client.setBasePath("https://fmsf2.firenet.gov/api");
-        client.setUsername("<user-name>);
-                client.setPassword("<api-key>");
+        client.setUsername("<user-name>");
+        client.setPassword("<api-key>");
         ResourceControllerApi resourceControllerApi = new ResourceControllerApi(client);
         ModelControllerApi modelControllerApi = new ModelControllerApi(client);
 

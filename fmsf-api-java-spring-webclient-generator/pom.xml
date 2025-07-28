@@ -122,12 +122,6 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <environmentVariables>
-                                <!-- TODO: remove these comments when working - MAVEN_GPG_PASSPHRASE is required for gpg to sign artifacts for publishing -->
-                                <!--
-                                <MAVEN_GPG_PASSPHRASE>gpg-signature-for-secret-key</MAVEN_GPG_PASSPHRASE>
-                                -->
-                            </environmentVariables>
                             <workingDirectory>${project.build.directory}/generated-sources/${project.build.finalName}</workingDirectory>
                             <executable>mvn</executable>
                             <arguments>

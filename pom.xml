@@ -15,7 +15,8 @@
         <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
         <openapi-generator-maven-plugin.version>7.14.0</openapi-generator-maven-plugin.version>
         <swagger-annotations-version>2.2.25</swagger-annotations-version>
-        <github-user-id>github-fmsf</github-user-id> <!-- TODO -->
+        <!-- If desired, the generated artifacts can be pushed to a github repo. See OpenApi templates for details -->
+        <github-user-id>github-fmsf</github-user-id>
     </properties>
     <dependencyManagement>
         <dependencies>

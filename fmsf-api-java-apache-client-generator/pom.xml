@@ -63,7 +63,7 @@
                                         <apiPackage>${api.package}</apiPackage>
                                         <artifactDescription>FMSF API Apache HTTP (${apache-httpclient.version}) Client SDK</artifactDescription>
                                         <artifactId>${project.build.finalName}</artifactId>
-                                        <artifactVersion>${project.version}-test</artifactVersion>
+                                        <artifactVersion>${project.version}</artifactVersion>
                                         <cleanupOutput>true</cleanupOutput>
                                         <dateLibrary>java8-localdatetime</dateLibrary>
                                         <developerName>FMSF API Team</developerName>
@@ -133,12 +133,6 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <environmentVariables>
-                                <!-- TODO: remove these comments when working - MAVEN_GPG_PASSPHRASE is required for gpg to sign artifacts for publishing -->
-                                <!--
-                                <MAVEN_GPG_PASSPHRASE>gpg-signature-for-secret-key</MAVEN_GPG_PASSPHRASE>
-                                -->
-                            </environmentVariables>
                             <workingDirectory>${project.build.directory}/generated-sources/${project.build.finalName}</workingDirectory>
                             <executable>mvn</executable>
                             <arguments>
