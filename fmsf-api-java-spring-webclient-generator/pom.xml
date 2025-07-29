@@ -6,12 +6,12 @@
     <parent>
         <groupId>gov.firenet.fmsf</groupId>
         <artifactId>fmsf-api-generator</artifactId>
-        <version>2.0.0</version>
+        <version>2.1.0</version>
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <packaging>pom</packaging>
     <artifactId>fmsf-api-java-spring-webclient-generator</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 
     <properties>
         <openapi-generate.verbose>false</openapi-generate.verbose>
@@ -44,7 +44,7 @@
                                 <configuration>
                                     <generatorName>java</generatorName>
                                     <output>${project.build.directory}/generated-sources/${project.build.finalName}</output>
-                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.yaml</inputSpec>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.json</inputSpec>
                                     <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <additionalProperties>javaCompilerVersion=${java.version},jacksonVersion=${jackson.version},jacksonDatabindNullVersion=${jackson-databind-nullable.version}</additionalProperties>
                                     <verbose>${openapi-generate.verbose}</verbose>
@@ -53,15 +53,12 @@
                                         <debugOperations>${openapi-generate.verbose}</debugOperations>
                                         <debugSupportingFiles>${openapi-generate.verbose}</debugSupportingFiles>
                                     </globalProperties>
-                                    <gitHost>github.com</gitHost>
-                                    <gitRepoId>${project.build.finalName}</gitRepoId>
-                                    <gitUserId>${github-user-id}</gitUserId>
                                     <configOptions>
-                                        <apiFirst>false</apiFirst>
                                         <annotationLibrary>swagger2</annotationLibrary>
+                                        <apiFirst>false</apiFirst>
                                         <apiPackage>${api.package}</apiPackage>
                                         <artifactId>${project.build.finalName}</artifactId>
-                                        <!-- version here depends on setting for "useJakarta" -->
+                                        <!-- version here depends on setting for "useJakarta". See pom.mustache for webclient -->
                                         <artifactDescription>FMSF API Spring Web Client (3.0.12) SDK</artifactDescription>
                                         <artifactVersion>${project.version}</artifactVersion>
                                         <cleanupOutput>true</cleanupOutput>
@@ -70,23 +67,24 @@
                                         <developerName>FMSF API Team</developerName>
                                         <developerEmail>admins@fmsf.firenet.gov</developerEmail>
                                         <developerOrganization>DOI FMSF API</developerOrganization>
+                                        <!-- options: "none", "source" -->
                                         <documentationProvider>none</documentationProvider>
                                         <enablePostProcessFile>false</enablePostProcessFile>
                                         <ensureUniqueParams>true</ensureUniqueParams>
                                         <enumUnknownDefaultCase>false</enumUnknownDefaultCase>
                                         <failOnUnknownProperties>false</failOnUnknownProperties>
-                                        <generateApiDocumentation>true</generateApiDocumentation>
+                                        <generateApiDocumentation>false</generateApiDocumentation>
                                         <generateApis>true</generateApis>
                                         <generateApiTests>false</generateApiTests>
                                         <generateClientAsBean>true</generateClientAsBean>
                                         <generateModels>true</generateModels>
-                                        <generateModelDocumentation>false</generateModelDocumentation>
-                                        <generateModelTests>false</generateModelTests>
+                                        <generateModelDocumentation>true</generateModelDocumentation>
+                                        <generateModelTests>true</generateModelTests>
                                         <generateSupportingFiles>true</generateSupportingFiles>
                                         <generateBuilders>true</generateBuilders>
                                         <groupId>${project.parent.groupId}</groupId>
                                         <httpUserAgent>${project.build.finalName}/${project.version}/java</httpUserAgent>
-                                        <invokerPackage>${api.package}.webclient</invokerPackage>
+                                        <invokerPackage>${api.package}.spring</invokerPackage>
                                         <library>webclient</library>
                                         <modelPackage>${api.package}.dto</modelPackage>
                                         <openApiNullable>true</openApiNullable>
@@ -124,7 +122,11 @@
                             <workingDirectory>${project.build.directory}/generated-sources/${project.build.finalName}</workingDirectory>
                             <executable>mvn</executable>
                             <arguments>
-                                <argument>install</argument>
+                                <argument>-s</argument>
+                                <argument>${project.parent.basedir}/maven-settings.xml</argument>
+                                <argument>--activate-profiles</argument>
+                                <argument>sign-artifacts,deploy-artifacts</argument>
+                                <argument>deploy</argument>
                             </arguments>
                         </configuration>
                     </plugin>

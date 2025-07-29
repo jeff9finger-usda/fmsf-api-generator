@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<settings>
+    <servers>
+        <server>
+            <!-- Maven Central Repository-->
+            <id>maven.central</id>
+            <username>WZsQxNHg</username>
+            <password>oodu/6jAB3b29QLrwrur3v8aMlN3kWAc7u7h+396VqHA</password>
+        </server>
+    </servers>
+    <profiles>
+        <profile>
+            <id>sign-artifacts</id>
+            <properties>
+                <gpg.keyname>8D5F22440EFF8BCC54586998307803155C7256C8</gpg.keyname>
+            </properties>
+        </profile>
+    </profiles>
+</settings>

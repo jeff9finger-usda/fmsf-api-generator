@@ -15,9 +15,8 @@ paths:
         \ will not do so."
       operationId: cancelRun
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -71,8 +70,7 @@ paths:
         \ order to run, e.g. geotiff landscapes or barrier shapefiles"
       operationId: upload
       parameters:
-      - explode: true
-        in: query
+      - in: query
         name: type
         required: true
         schema:
@@ -127,11 +125,9 @@ paths:
       description: Resource IDs refer to previously-uploaded resources
       operationId: uploadModel
       parameters:
-      - description: "Which model type to run, valid values: FLAM, MTT_, RNDG, FSPR,\
-          \ FARS."
-        explode: true
+      - name: type
+        description: "Which model type to run, valid values: FLAM, MTT_, RNDG, FSPR, FARS."
         in: query
-        name: type
         required: true
         schema:
           enum:
@@ -142,48 +138,42 @@ paths:
           - FSPR
           type: string
         style: form
-      - description: Landscape ID. Enter ID returned from /resource endpoint.
-        explode: true
+      - name: landscape
+        description: Landscape ID. Enter ID returned from /resource endpoint.
         in: query
-        name: landscape
         required: true
         schema:
           format: int64
           type: integer
         style: form
-      - description: Ignition ID. Enter ID returned from /resource endpoint.
-        explode: true
+      - name: ignition
+        description: Ignition ID. Enter ID returned from /resource endpoint.
         in: query
-        name: ignition
         required: false
         schema:
           format: int64
           type: integer
         style: form
-      - description: Barrier ID. Enter ID returned from /resource endpoint.
-        explode: true
+      - name: barrier
+        description: Barrier ID. Enter ID returned from /resource endpoint.
         in: query
-        name: barrier
         required: false
         schema:
           format: int64
           type: integer
         style: form
-      - description: "Gridded Wind Speed ID. Enter ID returned from /resource endpoint.\
+      - name: griddedWindSpeed
+        description: "Gridded Wind Speed ID. Enter ID returned from /resource endpoint.\
           \ Only available for use with FLAM, MTT_ and RNDG."
-        explode: true
         in: query
-        name: griddedWindSpeed
         required: false
         schema:
           format: int64
           type: integer
         style: form
-      - description: "Gridded Wind Direction ID. Enter ID returned from /resource\
-          \ endpoint. Only available for use with FLAM, MTT_ and RNDG."
-        explode: true
+      - name: griddedWindDir
+        description: "Gridded Wind Direction ID. Enter ID returned from /resource  endpoint. Only available for use with FLAM, MTT_ and RNDG."
         in: query
-        name: griddedWindDir
         required: false
         schema:
           format: int64
@@ -238,11 +228,12 @@ paths:
       - model-controller
   /resource/{id}:
     get:
+      x-audience:
+        - public
       operationId: download
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -286,9 +277,8 @@ paths:
     get:
       operationId: getResourceMetadata
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -334,9 +324,8 @@ paths:
     get:
       operationId: downloadModel
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -380,14 +369,13 @@ paths:
     get:
       operationId: getModelMetadata
       parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int64
-          type: integer
-        style: simple
+        - name: id
+          in: path
+          required: true
+          schema:
+            format: int64
+            type: integer
+          style: simple
       responses:
         "403":
           content:
@@ -428,9 +416,8 @@ paths:
     get:
       operationId: getInputFile
       parameters:
-      - explode: false
+      - name: id
         in: path
-        name: id
         required: true
         schema:
           format: int64
@@ -643,6 +630,5 @@ components:
   securitySchemes:
     basicAuth:
       description: Basic Authentication
-      name: Authorization
       scheme: basic
       type: http

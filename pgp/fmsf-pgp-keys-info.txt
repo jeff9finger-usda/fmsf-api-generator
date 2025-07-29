@@ -1,0 +1,8 @@
+GPG Key Details:
+- key-name: 8D5F22440EFF8BCC54586998307803155C7256C8
+- passphrase: Currently stored securely, but local TODO: Add to AWS SecretsManager
+- public-key-file: fmsf-pgp-public-key.asc
+- private-key-file: fmsf-pgp-private-key.asc TODO: Stored locally. Add to secure S3 Bucket
+- revoke-key: fmsf-pgp-revoke-key.asc
+
+keyserver: hkps://keys.openpgp.org
