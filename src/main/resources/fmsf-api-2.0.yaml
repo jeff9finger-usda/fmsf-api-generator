@@ -11,9 +11,8 @@ security:
 paths:
   /model/{id}/cancel:
     put:
-      x-audience:
-        - public
-      description: "Models that produce intermediate results, e.g. RANDIG or FSPro, will not do so."
+      description: "Models that produce intermediate results, e.g. RANDIG or FSPro,\
+        \ will not do so."
       operationId: cancelRun
       parameters:
       - name: id
@@ -67,8 +66,6 @@ paths:
       - model-controller
   /resource:
     post:
-      x-audience:
-        - public
       description: "Resources are auxiliary files that fire behavior models need in\
         \ order to run, e.g. geotiff landscapes or barrier shapefiles"
       operationId: upload
@@ -125,8 +122,6 @@ paths:
       - resource-controller
   /model:
     post:
-      x-audience:
-        - public
       description: Resource IDs refer to previously-uploaded resources
       operationId: uploadModel
       parameters:
@@ -231,64 +226,6 @@ paths:
       summary: Run a model
       tags:
       - model-controller
-  /model/{id}/reinitialize:
-    post:
-      x-audience: # options: public, (internal, admin, private, ??)?
-        - internal
-      #x-hidden: true
-      description: Effectively retries a failed or canceled model run by setting the
-        status to INIT.
-      operationId: reinitializeModelRun
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          format: int64
-          type: integer
-        style: simple
-      responses:
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-          description: Internal Error
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-          description: Specified model run does not exist
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ModelMetadataDto'
-          description: The specified ModelRun has been successfully reinitialized
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-          description: The specified model run is not failed or canceled status
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-          description: Missing or invalid credentials provided
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseDto'
-          description: You do not have permission to retry a model run
-      security:
-      - basicAuth: []
-      summary: Reinitialize a model run
-      tags:
-      - model-controller
   /resource/{id}:
     get:
       x-audience:
@@ -338,8 +275,6 @@ paths:
       - resource-controller
   /resource/{id}/metadata:
     get:
-      x-audience:
-        - public
       operationId: getResourceMetadata
       parameters:
       - name: id
@@ -387,8 +322,6 @@ paths:
       - resource-controller
   /model/{id}:
     get:
-      x-audience:
-        - public
       operationId: downloadModel
       parameters:
       - name: id
@@ -434,8 +367,6 @@ paths:
       - model-controller
   /model/{id}/metadata:
     get:
-      x-audience:
-        - public
       operationId: getModelMetadata
       parameters:
         - name: id
@@ -483,8 +414,6 @@ paths:
       - model-controller
   /model/{id}/input:
     get:
-      x-audience:
-        - public
       operationId: getInputFile
       parameters:
       - name: id
