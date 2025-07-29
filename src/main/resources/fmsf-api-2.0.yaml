@@ -1,0 +1,634 @@
+openapi: 3.1.0
+info:
+  description: Fire Modeling Services Framework API
+  title: FMSF API
+  version: 2.0.0
+servers:
+- description: Generated server url
+  url: https://localhost:8443/api
+security:
+- basicAuth: []
+paths:
+  /model/{id}/cancel:
+    put:
+      description: "Models that produce intermediate results, e.g. RANDIG or FSPro,\
+        \ will not do so."
+      operationId: cancelRun
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to access the requested model
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Model run was already in a terminal state
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelMetadataDto'
+          description: Model was successfully cancelled
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Requested model does not exist
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+      security:
+      - basicAuth: []
+      summary: Cancel a model run
+      tags:
+      - model-controller
+  /resource:
+    post:
+      description: "Resources are auxiliary files that fire behavior models need in\
+        \ order to run, e.g. geotiff landscapes or barrier shapefiles"
+      operationId: upload
+      parameters:
+      - in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - GEOTIFF
+          - SHAPE
+          type: string
+        style: form
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/upload_request'
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Uploaded resource failed initial validation
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to upload
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceMetadataDto'
+          description: Resource upload succeeded
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+      security:
+      - basicAuth: []
+      summary: Upload a resource
+      tags:
+      - resource-controller
+  /model:
+    post:
+      description: Resource IDs refer to previously-uploaded resources
+      operationId: uploadModel
+      parameters:
+      - name: type
+        description: "Which model type to run, valid values: FLAM, MTT_, RNDG, FSPR, FARS."
+        in: query
+        required: true
+        schema:
+          enum:
+          - FLAM
+          - MTT_
+          - FARS
+          - RNDG
+          - FSPR
+          type: string
+        style: form
+      - name: landscape
+        description: Landscape ID. Enter ID returned from /resource endpoint.
+        in: query
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - name: ignition
+        description: Ignition ID. Enter ID returned from /resource endpoint.
+        in: query
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - name: barrier
+        description: Barrier ID. Enter ID returned from /resource endpoint.
+        in: query
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - name: griddedWindSpeed
+        description: "Gridded Wind Speed ID. Enter ID returned from /resource endpoint.\
+          \ Only available for use with FLAM, MTT_ and RNDG."
+        in: query
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - name: griddedWindDir
+        description: "Gridded Wind Direction ID. Enter ID returned from /resource  endpoint. Only available for use with FLAM, MTT_ and RNDG."
+        in: query
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/upload_request'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelMetadataDto'
+          description: Model request has been successfully submitted
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You have exceeded your maximum concurrent runs for this model
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: "Input file, landscape, or required resource failed validation"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to run this model type
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+      security:
+      - basicAuth: []
+      summary: Run a model
+      tags:
+      - model-controller
+  /resource/{id}:
+    get:
+      x-audience:
+        - public
+      operationId: download
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to access the requested resource
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Requested resource does not exist
+        "200":
+          content:
+            application/octet-stream: {}
+          description: Download file
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+      security:
+      - basicAuth: []
+      summary: Download a resource
+      tags:
+      - resource-controller
+  /resource/{id}/metadata:
+    get:
+      operationId: getResourceMetadata
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to access the requested resource
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Requested resource does not exist
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceMetadataDto'
+          description: Metadata successfully requested and returned
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+      security:
+      - basicAuth: []
+      summary: Fetch metadata about a specific resource
+      tags:
+      - resource-controller
+  /model/{id}:
+    get:
+      operationId: downloadModel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to access the requested model
+        "200":
+          content:
+            application/octet-stream: {}
+          description: Download file
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Requested model does not exist
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+      security:
+      - basicAuth: []
+      summary: Download model run results
+      tags:
+      - model-controller
+  /model/{id}/metadata:
+    get:
+      operationId: getModelMetadata
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            format: int64
+            type: integer
+          style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to access the requested model
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Requested model does not exist
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelMetadataDto'
+          description: Metadata successfully requested and returned
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+      security:
+      - basicAuth: []
+      summary: Fetch metadata about a specific model run
+      tags:
+      - model-controller
+  /model/{id}/input:
+    get:
+      operationId: getInputFile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: You do not have permission to access the requested model
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Missing or invalid credentials provided
+        "200":
+          content:
+            text/plain: {}
+            application/zip: {}
+          description: File download
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Requested model does not exist
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+          description: Internal Error
+      security:
+      - basicAuth: []
+      summary: Download the input file for a specific model run
+      tags:
+      - model-controller
+components:
+  schemas:
+    ErrorResponseDto:
+      example:
+        id: id
+        error: error
+      properties:
+        id:
+          type: string
+        error:
+          type: string
+    ModelMetadataDto:
+      example:
+        owner: owner
+        landscapeId: 5
+        fuelbedId: 5
+        created: 2000-01-23T04:56:07.000+00:00
+        edgeHits: 2
+        runtime: 6
+        started: 2000-01-23T04:56:07.000+00:00
+        modelType: FLAM
+        completed: 2000-01-23T04:56:07.000+00:00
+        firesFailed: 7
+        ignitionId: 7
+        limitingShapeId: 3
+        firesCompleted: 1
+        outputFolderSize: 1
+        statusMsg: statusMsg
+        proportionComplete: 4.145608
+        treeMapId: 2
+        barrierId: 9
+        proportionBurned: 1.0246457
+        expiration: 2000-01-23T04:56:07.000+00:00
+        runId: 0
+        runStatus: INIT
+      properties:
+        runId:
+          format: int64
+          type: integer
+        owner:
+          type: string
+        modelType:
+          enum:
+          - FLAM
+          - MTT_
+          - FARS
+          - RNDG
+          - FSPR
+          type: string
+        runStatus:
+          enum:
+          - INIT
+          - QUED
+          - CNCL
+          - RUN
+          - FAIL
+          - DONE
+          type: string
+        created:
+          format: date-time
+          type: string
+        started:
+          format: date-time
+          type: string
+        completed:
+          format: date-time
+          type: string
+        runtime:
+          format: int64
+          type: integer
+        expiration:
+          format: date-time
+          type: string
+        outputFolderSize:
+          format: int64
+          type: integer
+        landscapeId:
+          format: int64
+          type: integer
+        fuelbedId:
+          format: int64
+          type: integer
+        treeMapId:
+          format: int64
+          type: integer
+        statusMsg:
+          type: string
+        ignitionId:
+          format: int64
+          type: integer
+        barrierId:
+          format: int64
+          type: integer
+        limitingShapeId:
+          format: int64
+          type: integer
+        edgeHits:
+          format: int32
+          type: integer
+        proportionComplete:
+          format: float
+          type: number
+        firesFailed:
+          format: int32
+          type: integer
+        firesCompleted:
+          format: int32
+          type: integer
+        proportionBurned:
+          format: float
+          type: number
+    ResourceMetadataDto:
+      example:
+        owner: owner
+        numRows: 1
+        resolution: 6
+        numCells: 2
+        numBands: 5
+        uploaded: 2000-01-23
+        expiration: 2000-01-23
+        id: 0
+        folderName: folderName
+        projection: projection
+        numColumns: 5
+        geometryType: geometryType
+        resourceType: GEOTIFF
+      properties:
+        id:
+          format: int64
+          type: integer
+        owner:
+          type: string
+        resourceType:
+          enum:
+          - GEOTIFF
+          - SHAPE
+          type: string
+        folderName:
+          type: string
+        uploaded:
+          format: date
+          type: string
+        expiration:
+          format: date
+          type: string
+        projection:
+          type: string
+        resolution:
+          format: int32
+          type: integer
+        numRows:
+          format: int32
+          type: integer
+        numColumns:
+          format: int32
+          type: integer
+        numBands:
+          format: int32
+          type: integer
+        numCells:
+          format: int32
+          type: integer
+        geometryType:
+          type: string
+    upload_request:
+      properties:
+        file:
+          format: binary
+          type: string
+  securitySchemes:
+    basicAuth:
+      description: Basic Authentication
+      scheme: basic
+      type: http

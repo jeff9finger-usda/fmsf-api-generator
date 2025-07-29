@@ -6,15 +6,17 @@
     <packaging>pom</packaging>
     <groupId>gov.firenet.fmsf</groupId>
     <artifactId>fmsf-api-generator</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <properties>
         <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
-        <openapi-generator-maven-plugin.version>7.13.0</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>7.14.0</openapi-generator-maven-plugin.version>
         <swagger-annotations-version>2.2.25</swagger-annotations-version>
+        <!-- If desired, the generated artifacts can be pushed to a github repo. See OpenApi templates for details -->
+        <github-user-id>github-fmsf</github-user-id>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -45,9 +47,15 @@
         <module>fmsf-api-java-apache-client-generator</module>
         <module>fmsf-api-java-spring-webclient-generator</module>
         <module>fmsf-api-java-jersey3-client-generator</module>
+        <!-- <module>fmsf-api-java-spring-boot-server-generator</module> -->
+        <!--
+        These projects have been started, but releasing from a maven build
+        may not be possible. Investigation needed.
+
         <module>fmsf-api-java-spring-boot-server-generator</module>
         <module>fmsf-api-postman-collection-generator</module>
         <module>fmsf-api-typescript-angular-generator</module>
         <module>fmsf-api-typescript-node-generator</module>
+        -->
     </modules>
 </project>

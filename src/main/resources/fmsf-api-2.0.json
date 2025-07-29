@@ -7,11 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://fmsf2.firenet.gov/api",
-      "description": "Generated server url"
-    },
-    {
-      "url": "https://fmsf2-qa.firenet.gov/api",
+      "url": "https://localhost:8443/api",
       "description": "Generated server url"
     }
   ],
@@ -136,7 +132,6 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["file"],
                 "properties": {
                   "file": {
                     "type": "string",
@@ -285,14 +280,8 @@
         "requestBody": {
           "content": {
             "multipart/form-data": {
-              "encoding": {
-                "file": {
-                  "contentType": "application/octet-stream,application/zip,text/plain"
-                }
-              },
               "schema": {
                 "type": "object",
-                "required": ["file"],
                 "properties": {
                   "file": {
                     "type": "string",
@@ -356,6 +345,95 @@
           },
           "500": {
             "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/model/{id}/reinitialize": {
+      "x-hidden": true,
+      "post": {
+        "tags": [
+          "model-controller"
+        ],
+        "summary": "Reinitialize a model run",
+        "description": "Effectively retries a failed or canceled model run by setting the status to INIT.",
+        "operationId": "reinitializeModelRun",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Specified model run does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The specified ModelRun has been successfully reinitialized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelMetadataDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The specified model run is not failed or canceled status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid credentials provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "You do not have permission to retry a model run",
             "content": {
               "application/json": {
                 "schema": {
@@ -925,6 +1003,7 @@
       "basicAuth": {
         "type": "http",
         "description": "Basic Authentication",
+        "name": "Authorization",
         "scheme": "basic"
       }
     }
