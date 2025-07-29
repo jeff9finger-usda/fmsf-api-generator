@@ -6,12 +6,12 @@
     <parent>
         <groupId>gov.firenet.fmsf</groupId>
         <artifactId>fmsf-api-generator</artifactId>
-        <version>2.0.0</version>
+        <version>2.1.0</version>
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <packaging>pom</packaging>
     <artifactId>fmsf-api-java-jersey3-client-generator</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 
     <properties>
         <openapi-generate.verbose>false</openapi-generate.verbose>

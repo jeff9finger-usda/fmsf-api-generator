@@ -72,6 +72,13 @@ With these ideas in mind, the following commands must be executed on order for t
 # and you don't want to pollute it, use the following:
 # export GNUPGHOME=$(mktemp -d)
 
+# In addition, to enable `maven` to unencrypt the <server>maven.central</server> password,
+# the Maven settings-security.xml file (<maven-settings-security-file>) must be "installed" in $HOME/.m2/settings-security.xml for the
+# user executing mvn.
+
+# Both the <gnupg-secret-key-passphrase> <maven-settings-security-file> are available on a secure
+# AWS S3 Bucket available to the CI/CD process. 
+
 gpg --batch --import <pnupg-secret-key-file> # fmsf-private-key.asc from above
 MAVEN_GPG_PASSPHRASE='<gnupg-secret-key-passphrase>' mvn install
 ```
