@@ -44,7 +44,7 @@
                                 <configuration>
                                     <library>jersey3</library>
                                     <output>${project.build.directory}/generated-sources/${project.build.finalName}</output>
-                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.yaml</inputSpec>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.1.yaml</inputSpec>
                                     <generatorName>java</generatorName>
                                     <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <additionalProperties>jerseyVersion=${jersey.version},javaCompilerVersion=${java.version},jacksonVersion=${jackson.version}</additionalProperties>

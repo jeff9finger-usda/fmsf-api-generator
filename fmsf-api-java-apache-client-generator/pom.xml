@@ -44,7 +44,7 @@
                                 </goals>
                                 <configuration>
                                     <output>${project.build.directory}/generated-sources/${project.build.finalName}</output>
-                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.yaml</inputSpec>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.1.yaml</inputSpec>
                                     <templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>
                                     <additionalProperties>apacheHttpClientVersion=${apache-httpclient.version},javaCompilerVersion=${java.version},jacksonVersion=${jackson.version},jacksonDatabindNullVersion=${jackson-databind-nullable.version}</additionalProperties>
                                     <generatorName>java</generatorName>

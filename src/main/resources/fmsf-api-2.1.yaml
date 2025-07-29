@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   description: Fire Modeling Services Framework API
   title: FMSF API
-  version: 2.0.0
+  version: 2.1.0
 servers:
 - description: Generated server url
   url: https://localhost:8443/api
