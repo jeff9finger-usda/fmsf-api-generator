@@ -38,7 +38,7 @@
                                 </goals>
                                 <configuration>
                                     <output>${project.build.directory}/${project.build.finalName}</output>
-                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.0.yaml</inputSpec>
+                                    <inputSpec>${project.parent.basedir}/src/main/resources/fmsf-api-2.1.yaml</inputSpec>
                                     <!--<templateDirectory>${project.parent.basedir}/src/main/resources/templates/java</templateDirectory>-->
                                     <generatorName>typescript-node</generatorName>
                                     <verbose>${openapi-generate.verbose}</verbose>
